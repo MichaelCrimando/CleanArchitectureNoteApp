@@ -1,4 +1,4 @@
-package com.scamofty.cleanarchitecturenoteapp
+package com.scamofty.cleanarchitecturenoteapp.feature_note.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
