@@ -6,13 +6,13 @@ import androidx.room.Room
 import com.scamofty.cleanarchitecturenoteapp.feature_note.data.data_source.NoteDatabase
 import com.scamofty.cleanarchitecturenoteapp.feature_note.data.repository.NoteRepositoryImpl
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.repository.NoteRepository
+import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.use_case.AddNote
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.use_case.DeleteNote
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.use_case.GetNotes
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.use_case.NoteUseCases
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -40,9 +40,8 @@ object AppModule {
     fun provideNoteUseCases(repository: NoteRepository): NoteUseCases {
         return NoteUseCases(
             getNotes = GetNotes(repository),
-            deleteNote = DeleteNote(
-                repository
-            )
+            deleteNote = DeleteNote(repository),
+            addNote = AddNote(repository)
         )
     }
 }
