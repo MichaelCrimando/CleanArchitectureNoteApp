@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">CleanArchitectureNoteApp</string>
+    <string name="sort_by_title">Title</string>
+    <string name="sort_by_date">Date</string>
+    <string name="sort_by_color">Color</string>
+    <string name="sort_by_ascending">Color</string>
+    <string name="sort_by_descending">Color</string>
 </resources>
