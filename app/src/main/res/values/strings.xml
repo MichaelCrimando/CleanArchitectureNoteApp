@@ -5,4 +5,9 @@
     <string name="sort_by_color">Color</string>
     <string name="sort_by_ascending">Color</string>
     <string name="sort_by_descending">Color</string>
+    <string name="your_notes">Your Notes</string>
+    <string name="sort">Sort</string>
+    <string name="add_note">Add note</string>
+    <string name="note_deleted">Note deleted</string>
+    <string name="undo">Undo</string>
 </resources>
