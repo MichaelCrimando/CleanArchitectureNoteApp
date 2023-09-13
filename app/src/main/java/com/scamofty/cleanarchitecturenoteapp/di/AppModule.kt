@@ -7,6 +7,7 @@ import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.data.repository
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.repository.NoteRepository
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.use_case.AddNote
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.use_case.DeleteNote
+import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.use_case.GetNote
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.use_case.GetNotes
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.use_case.NoteUseCases
 import dagger.Module
@@ -40,7 +41,8 @@ object AppModule {
         return NoteUseCases(
             getNotes = GetNotes(repository),
             deleteNote = DeleteNote(repository),
-            addNote = AddNote(repository)
+            addNote = AddNote(repository),
+            getNote = GetNote(repository),
         )
     }
 }
