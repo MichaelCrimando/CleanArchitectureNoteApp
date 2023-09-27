@@ -26,7 +26,9 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -39,6 +41,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.model.Note
 import com.scamofty.cleanarchitecturenoteapp.feature_note.presentation.add_edit_note.components.TransparentHintTextField
+//import kotlinx.coroutines.NonCancellable.message
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -51,7 +55,7 @@ fun AddEditNoteScreen(
 ) {
     val titleState = viewModel.noteTitle.value
     val contentState = viewModel.noteBody.value
-    //val scaffoldState = SnackBarHostState()
+    val scaffoldState = SnackbarHostState()
 
     val noteBackgroundAnimatable = remember {
         Animatable(
@@ -59,6 +63,20 @@ fun AddEditNoteScreen(
         )
     }
     val scope = rememberCoroutineScope()
+    LaunchedEffect(key1 = true) {//TODO key1?
+        viewModel.eventFlow.collectLatest { event ->
+            when(event) {
+                is AddEditNoteViewModel.UiEvent.ShowSnackbar -> {
+                    scaffoldState.showSnackbar(
+                        message = event.message
+                    )
+                }
+                is AddEditNoteViewModel.UiEvent.SaveNote -> {
+
+                }
+            }
+        }
+    }
 
     Scaffold(
         floatingActionButton = {
