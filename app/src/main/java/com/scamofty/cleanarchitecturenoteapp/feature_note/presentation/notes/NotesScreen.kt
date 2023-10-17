@@ -45,6 +45,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.ui.platform.LocalContext
 import com.scamofty.cleanarchitecturenoteapp.feature_note.presentation.util.Screen
+import kotlinx.coroutines.delay
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -130,9 +131,13 @@ fun NotesScreen(
                                             message = context.resources.getString(R.string.note_deleted),
                                             actionLabel = context.resources.getString(R.string.undo)
                                         )
+
+                                    delay(5000)
+                                    snackbarHostState.currentSnackbarData?.dismiss()
                                     if (result == SnackbarResult.ActionPerformed) {
                                         viewModel.onEvent(NotesEvent.RestoreNote)
                                     }
+
                                 }
                             }
                         )
