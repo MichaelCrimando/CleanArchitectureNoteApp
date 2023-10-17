@@ -1,5 +1,6 @@
 package com.scamofty.cleanarchitecturenoteapp.feature_note.presentation.notes
 
+import android.app.AlertDialog
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -43,6 +44,7 @@ import kotlinx.coroutines.launch
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.ui.platform.LocalContext
+import com.scamofty.cleanarchitecturenoteapp.feature_note.presentation.util.Screen
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,7 +62,7 @@ fun NotesScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-
+                    navController.navigate(Screen.AddEditNoteScreen.route)
                 },
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
