@@ -132,12 +132,11 @@ fun NotesScreen(
                                             actionLabel = context.resources.getString(R.string.undo)
                                         )
 
-                                    delay(5000)
-                                    snackbarHostState.currentSnackbarData?.dismiss()
                                     if (result == SnackbarResult.ActionPerformed) {
                                         viewModel.onEvent(NotesEvent.RestoreNote)
                                     }
-
+                                    delay(5000)
+                                    snackbarHostState.currentSnackbarData?.dismiss()
                                 }
                             }
                         )
