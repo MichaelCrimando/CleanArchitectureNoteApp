@@ -7,7 +7,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,7 +20,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -43,7 +41,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.model.Note
 import com.scamofty.cleanarchitecturenoteapp.feature_note.presentation.add_edit_note.components.TransparentHintTextField
-//import kotlinx.coroutines.NonCancellable.message
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -74,7 +71,7 @@ fun AddEditNoteScreen(
                     )
                 }
                 is AddEditNoteViewModel.UiEvent.SaveNote -> {
-
+                    navController.navigateUp()
                 }
             }
         }
@@ -86,7 +83,6 @@ fun AddEditNoteScreen(
                 onClick = {
                     viewModel.onEvent(AddEditNoteEvent.SaveNote)
                 },
-                Modifier.background(MaterialTheme.colorScheme.primary)
             ) {
                 Icon(imageVector = Icons.Default.CheckCircle , contentDescription = "Save note")
             }
@@ -146,9 +142,10 @@ fun AddEditNoteScreen(
                 },
                 isHintVisible = titleState.isHintVisible,
                 singleLine = true,
-                textStyle = MaterialTheme.typography.headlineMedium
+                textStyle = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.height(40.dp)
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             TransparentHintTextField(
                 text = contentState.text,
                 hint = contentState.hint,
@@ -158,7 +155,7 @@ fun AddEditNoteScreen(
                 onFocusChange = {
                     viewModel.onEvent(AddEditNoteEvent.ChangeContentFocus(it))
                 },
-                isHintVisible = titleState.isHintVisible,
+                isHintVisible = contentState.isHintVisible,
                 textStyle = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.fillMaxHeight()
             )
