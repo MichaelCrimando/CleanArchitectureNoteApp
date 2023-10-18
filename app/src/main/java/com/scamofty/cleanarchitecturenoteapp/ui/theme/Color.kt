@@ -3,7 +3,7 @@ package com.scamofty.cleanarchitecturenoteapp.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val DarkGray = Color(0xFF202020)
-val LightBlue = Color(0xFFD7E8DE)
+val LightBlue = Color(0xff33c4c1)
 
 val RedOrange = Color(0xffffab91)
 val RedPink = Color(0xfff48fb1)
