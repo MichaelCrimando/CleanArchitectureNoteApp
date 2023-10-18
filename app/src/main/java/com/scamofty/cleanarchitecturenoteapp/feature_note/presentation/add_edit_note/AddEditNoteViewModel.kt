@@ -1,6 +1,7 @@
 package com.scamofty.cleanarchitecturenoteapp.feature_note.presentation.add_edit_note
 
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
@@ -20,7 +21,7 @@ class AddEditNoteViewModel @Inject constructor(
     private val noteUseCases: NoteUseCases,
     savedStateHandle: SavedStateHandle //Hilt automatically injects it
 ) : ViewModel() {
-    var currentNoteId: Int? = null
+    private var currentNoteId: Int? = null
 
     init {
         savedStateHandle.get<Int>("noteId")?.let {noteId ->
@@ -37,7 +38,7 @@ class AddEditNoteViewModel @Inject constructor(
                             text = note.content,
                             isHintVisible = false
                         )
-                        _noteColor.value = note.color
+                        _noteColor.intValue = note.color
                     }
                 }
             }
@@ -61,7 +62,7 @@ class AddEditNoteViewModel @Inject constructor(
     val noteBody: State<NoteTextFieldState> = _noteBody
 
     //State for current color
-    private val _noteColor = mutableStateOf<Int>(Note.noteColors.random().toArgb())
+    private val _noteColor = mutableIntStateOf(Note.noteColors.random().toArgb())
     val noteColor: State<Int> = _noteColor
 
     //Use for one time events, more like a xml thing since JetPack Compose doesn't have 1 time events
@@ -94,7 +95,7 @@ class AddEditNoteViewModel @Inject constructor(
             }
             //TODO: Why is copy not needed here?
             is AddEditNoteEvent.ChangeColor -> {
-                _noteColor.value = event.color
+                _noteColor.intValue = event.color
             }
             //now use coroutine because you're saving to a database which can take longer
             is AddEditNoteEvent.SaveNote -> {
@@ -118,9 +119,6 @@ class AddEditNoteViewModel @Inject constructor(
                         )
                     }
                 }
-            }
-            else -> {
-                //Do nothing
             }
         }
     }

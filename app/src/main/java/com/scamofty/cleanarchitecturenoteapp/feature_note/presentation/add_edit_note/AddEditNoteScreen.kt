@@ -1,8 +1,6 @@
 package com.scamofty.cleanarchitecturenoteapp.feature_note.presentation.add_edit_note
 import android.annotation.SuppressLint
-import android.widget.Space
 import androidx.compose.animation.Animatable
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,7 +19,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -45,7 +42,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddEditNoteScreen(
     navController: NavController, //To nav back when click save
@@ -83,10 +79,11 @@ fun AddEditNoteScreen(
                 onClick = {
                     viewModel.onEvent(AddEditNoteEvent.SaveNote)
                 },
+
             ) {
                 Icon(imageVector = Icons.Default.CheckCircle , contentDescription = "Save note")
             }
-        }        //scaffoldState = scaffoldState //TODO Need?
+        }
     ){
         Column(
             modifier = Modifier
@@ -120,7 +117,7 @@ fun AddEditNoteScreen(
                                 scope.launch {
                                     noteBackgroundAnimatable.animateTo(
                                         targetValue = Color(colorInt),
-                                        animationSpec = tween( //TODO: Tween? animation spec?
+                                        animationSpec = tween(
                                             durationMillis = 500
                                         )
                                     )
