@@ -1,8 +1,14 @@
-package com.scamofty.cleanarchitecturenoteapp.feature_note.data.data_source
+package com.scamofty.cleanarchitecturenoteapp.feature_note.presentation.cloud_messaging
 
 import android.util.Log
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.model.InvalidNoteException
+import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.model.Note
+import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.use_case.NoteUseCases
+import com.scamofty.cleanarchitecturenoteapp.feature_note.presentation.add_edit_note.AddEditNoteViewModel.UiEvent
+import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers.IO
@@ -10,14 +16,23 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 class FirebaseCloudMessaging: FirebaseMessagingService() {
     private val scope = MainScope()
     private var messageProcessQueue = Channel<Job>(Channel.UNLIMITED)
+    @Inject
+    lateinit var noteUseCases: NoteUseCases
+    //Use for one time events, more like a xml thing since JetPack Compose doesn't have 1 time events
+    private val _eventFlow = MutableSharedFlow<UiEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
+
 
     init {
         scope.launch(IO){
@@ -62,9 +77,25 @@ class FirebaseCloudMessaging: FirebaseMessagingService() {
             if ( /* Check if data needs to be processed by long running job */true) {
                 // For long-running tasks (10 seconds or more) use coroutines.
                 scheduleJob{
-                    val idk = withContext(IO) {
-                        //TODO: Do some data decryption or whatever
-                    }
+                    //TODO: Fill this out
+                        try {
+//                            noteUseCases.addCloudNote(
+//                                Note(
+//                                    title = noteTitle.value.text,
+//                                    content = noteBody.value.text,
+//                                    timestamp = System.currentTimeMillis(),
+//                                    color = noteColor.value,
+//                                    id = currentNoteId
+//                                )
+//                            )
+//                            _eventFlow.emit(UiEvent.SaveNote)
+                        } catch(e: InvalidNoteException) {
+                            _eventFlow.emit(
+                                UiEvent.ShowSnackbar(
+                                    message = e.message ?: "Couldn't save note"
+                                )
+                            )
+                        }
                     //doSomethingWithResult()
                 }
             } else {

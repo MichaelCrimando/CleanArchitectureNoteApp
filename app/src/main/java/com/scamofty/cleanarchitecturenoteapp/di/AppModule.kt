@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.scamofty.cleanarchitecturenoteapp.feature_note.data.data_source.NoteDatabase
 import com.scamofty.cleanarchitecturenoteapp.feature_note.data.repository.NoteRepositoryImpl
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.repository.NoteRepository
+import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.use_case.AddCloudNote
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.use_case.AddNote
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.use_case.DeleteNote
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.use_case.GetNote
@@ -43,6 +44,7 @@ object AppModule {
             deleteNote = DeleteNote(repository),
             addNote = AddNote(repository),
             getNote = GetNote(repository),
+            addCloudNote = AddCloudNote(repository)
         )
     }
 }

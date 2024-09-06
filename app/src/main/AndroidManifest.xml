@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name="com.scamofty.cleanarchitecturenoteapp.feature_note.data.data_source.FirebaseCloudMessaging"
+            android:name="com.scamofty.cleanarchitecturenoteapp.feature_note.presentation.cloud_messaging.FirebaseCloudMessaging"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
