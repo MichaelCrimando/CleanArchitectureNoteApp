@@ -8,12 +8,41 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.viewModelScope
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.util.NoteOrder
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.internal.synchronized
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 class FirebaseCloudMessaging: FirebaseMessagingService() {
+    private val scope = MainScope()
+    private var messageProcessQueue = Channel<Job>(Channel.UNLIMITED)
+
+    init {
+        scope.launch(IO){
+            for (job in messageProcessQueue) job.join()
+        }
+    }
+
+
     /**
      * Called when message is received.
      *
@@ -44,11 +73,17 @@ class FirebaseCloudMessaging: FirebaseMessagingService() {
 
         // Check if message contains a data payload.
         if (remoteMessage.data.size > 0) {
+
             Log.d(TAG, "Message data payload: " + remoteMessage.data)
 
             if ( /* Check if data needs to be processed by long running job */true) {
-                // For long-running tasks (10 seconds or more) use WorkManager.
-                scheduleJob()
+                // For long-running tasks (10 seconds or more) use coroutines.
+                scheduleJob{
+                    val idk = withContext(IO) {
+                        //TODO: Do some data decryption or whatever
+                    }
+                    //doSomethingWithResult()
+                }
             } else {
                 // Handle message within 10 seconds
                 handleNow()
@@ -94,16 +129,20 @@ class FirebaseCloudMessaging: FirebaseMessagingService() {
 
     // [END on_new_token]
     /**
-     * Schedule async work using WorkManager.
+     * Schedule async work using Coroutines.
      */
-    private fun scheduleJob() {
-        // [START dispatch_job]
-//        val work: OneTimeWorkRequest = Builder(MyWorker::class.java)
-//            .build()
-//        WorkManager.getInstance(this).beginWith(work).enqueue()
-        // [END dispatch_job]
+    private fun scheduleJob(
+        context: CoroutineContext = EmptyCoroutineContext,
+        block: suspend CoroutineScope.() -> Unit
+    ) {
+        val job = scope.launch(context, CoroutineStart.LAZY, block)
+        println("Processing Job $job")
+        messageProcessQueue.trySend(job)
     }
-
+    private fun cancelQueue(){
+        messageProcessQueue.cancel()
+        scope.cancel()
+    }
     /**
      * Handle time allotted to BroadcastReceivers.
      */
