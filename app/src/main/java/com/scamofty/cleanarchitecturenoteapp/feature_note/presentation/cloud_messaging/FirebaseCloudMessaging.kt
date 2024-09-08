@@ -1,6 +1,7 @@
 package com.scamofty.cleanarchitecturenoteapp.feature_note.presentation.cloud_messaging
 
 import android.util.Log
+import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -8,6 +9,7 @@ import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.model.InvalidNo
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.model.Note
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.use_case.NoteUseCases
 import com.scamofty.cleanarchitecturenoteapp.feature_note.presentation.add_edit_note.AddEditNoteViewModel.UiEvent
+import com.scamofty.cleanarchitecturenoteapp.ui.theme.LightBlue
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -20,6 +22,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.Math.random
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -32,9 +35,12 @@ class FirebaseCloudMessaging: FirebaseMessagingService() {
     //Use for one time events, more like a xml thing since JetPack Compose doesn't have 1 time events
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
+    private var currentNoteId: Int? = null
+
 
 
     init {
+        Log.d(TAG, "Booting up the mainframe connection.")
         scope.launch(IO){
             for (job in messageProcessQueue) job.join()
         }
@@ -77,18 +83,17 @@ class FirebaseCloudMessaging: FirebaseMessagingService() {
             if ( /* Check if data needs to be processed by long running job */true) {
                 // For long-running tasks (10 seconds or more) use coroutines.
                 scheduleJob{
-                    //TODO: Fill this out
                         try {
-//                            noteUseCases.addCloudNote(
-//                                Note(
-//                                    title = noteTitle.value.text,
-//                                    content = noteBody.value.text,
-//                                    timestamp = System.currentTimeMillis(),
-//                                    color = noteColor.value,
-//                                    id = currentNoteId
-//                                )
-//                            )
-//                            _eventFlow.emit(UiEvent.SaveNote)
+                            noteUseCases.addCloudNote(
+                                Note(
+                                    title = remoteMessage.notification?.title ?:"Error",
+                                    content = remoteMessage.notification?.body ?:"Error",
+                                    timestamp = remoteMessage.sentTime,
+                                    color = Note.noteColors.random().toArgb(),
+                                    //TODO: This makes a bug on clashing IDs lol
+                                    id = remoteMessage.messageId?.toInt() ?: random().toInt()
+                                )
+                            )
                         } catch(e: InvalidNoteException) {
                             _eventFlow.emit(
                                 UiEvent.ShowSnackbar(
@@ -174,6 +179,7 @@ class FirebaseCloudMessaging: FirebaseMessagingService() {
      */
     private fun sendRegistrationToServer(token: String) {
         // TODO: Implement this method to send token to your app server.
+        Log.d(TAG, "sendRegistrationTokenToServer($token)")
     }
 
     /**
@@ -217,6 +223,6 @@ class FirebaseCloudMessaging: FirebaseMessagingService() {
     }
 
     companion object {
-        private const val TAG = "MyFirebaseMsgService"
+        private const val TAG = "FirebaseCloudMessaging"
     }
 }

@@ -27,7 +27,7 @@ class AddEditNoteViewModel @Inject constructor(
         savedStateHandle.get<Int>("noteId")?.let {noteId ->
             if(noteId != 1) {
                 viewModelScope.launch {
-                    //TODO: what is .also?
+                    //Note to self: The also function lets you do a useful side effect with the object.
                     noteUseCases.getNote(noteId)?.also { note ->
                         currentNoteId = note.id
                         _noteTitle.value = noteTitle.value.copy(
