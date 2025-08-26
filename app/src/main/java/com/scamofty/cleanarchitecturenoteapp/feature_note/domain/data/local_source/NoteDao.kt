@@ -1,4 +1,4 @@
-package com.scamofty.cleanarchitecturenoteapp.feature_note.domain.data.data_source
+package com.scamofty.cleanarchitecturenoteapp.feature_note.domain.data.local_source
 
 import androidx.room.Dao
 import androidx.room.Delete

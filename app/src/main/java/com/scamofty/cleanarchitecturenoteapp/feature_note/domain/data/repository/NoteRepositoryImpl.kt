@@ -1,6 +1,6 @@
 package com.scamofty.cleanarchitecturenoteapp.feature_note.domain.data.repository
 
-import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.data.data_source.NoteDao
+import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.data.local_source.NoteDao
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.model.Note
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.repository.NoteRepository
 import kotlinx.coroutines.flow.Flow
