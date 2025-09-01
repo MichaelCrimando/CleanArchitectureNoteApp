@@ -2,7 +2,7 @@ package com.scamofty.cleanarchitecturenoteapp.di
 
 import android.app.Application
 import androidx.room.Room
-import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.data.data_source.NoteDatabase
+import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.data.local_source.NoteDatabase
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.data.repository.NoteRepositoryImpl
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.repository.NoteRepository
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.use_case.AddNote
