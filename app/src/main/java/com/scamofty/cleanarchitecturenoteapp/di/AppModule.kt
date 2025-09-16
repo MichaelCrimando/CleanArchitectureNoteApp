@@ -3,6 +3,8 @@ package com.scamofty.cleanarchitecturenoteapp.di
 import android.app.Application
 import androidx.room.Room
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.data.local_source.NoteDatabase
+import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.data.remote_source.NoteApi
+import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.data.remote_source.NoteApiImpl
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.data.repository.NoteRepositoryImpl
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.repository.NoteRepository
 import com.scamofty.cleanarchitecturenoteapp.feature_note.domain.use_case.AddNote
@@ -14,6 +16,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import io.ktor.client.HttpClient
 import javax.inject.Singleton
 
 @Module
@@ -31,8 +34,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNoteRepository(db: NoteDatabase): NoteRepository {
-        return NoteRepositoryImpl(db.noteDao)
+    fun provideNoteRepository(db: NoteDatabase, api: NoteApi): NoteRepository {
+        return NoteRepositoryImpl(db.noteDao, api)
     }
 
     @Provides
@@ -44,5 +47,11 @@ object AppModule {
             addNote = AddNote(repository),
             getNote = GetNote(repository),
         )
+    }
+
+    @Provides
+    @Singleton
+    fun provideNoteApi(client: HttpClient): NoteApi {
+        return NoteApiImpl(client)
     }
 }

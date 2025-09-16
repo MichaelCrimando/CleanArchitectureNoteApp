@@ -57,6 +57,7 @@ android {
 dependencies {
     val roomVersion = "2.7.2"
     val composeBomVersion = "2025.08.01"
+    val ktorVersion = "3.2.3"
 
     implementation(platform("androidx.compose:compose-bom:$composeBomVersion"))
     testImplementation(platform("androidx.compose:compose-bom:$composeBomVersion"))
@@ -94,4 +95,12 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.57.1")
     ksp("com.google.dagger:hilt-compiler:2.57.1")
     ksp("androidx.hilt:hilt-compiler:1.2.0")
+
+    //Ktor
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-android:$ktorVersion")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-client-serialization:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+    implementation("io.ktor:ktor-client-logging:$ktorVersion")
 }
