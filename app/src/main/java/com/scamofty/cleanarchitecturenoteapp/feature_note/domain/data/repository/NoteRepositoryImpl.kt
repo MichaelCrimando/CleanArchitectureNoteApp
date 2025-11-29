@@ -40,6 +40,8 @@ class NoteRepositoryImpl(
     }
 
     override suspend fun refreshNotes() {
+        //1. Get notes from the server (source of truth)
+        //2. Update local cache
         val remoteNotes = api.getNotes()
         remoteNotes.forEach { dto ->
             dao.insertNote(dto.toDomain())
